@@ -1,5 +1,8 @@
 #include <LowPower.h>
 
+const int night_threshold = 3;
+const int day_threshold = 50;
+
 const int photocellPin = A3;
 const int mot_up = 7;
 const int mot_down = 8;
@@ -9,9 +12,6 @@ const int power_photocell = 13;
 
 const int topSwitchPin = 2;
 const int bottomSwitchPin = 3;
-
-const int night_threshold = 30;
-const int day_threshold = 60;
 
 void quick_wait(){
   LowPower.powerDown(SLEEP_250MS, ADC_OFF, BOD_OFF);

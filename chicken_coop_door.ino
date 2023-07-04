@@ -3,15 +3,15 @@
 const int night_threshold = 3;
 const int day_threshold = 50;
 
-const int photocellPin = A3;
-const int mot_up = 7;
-const int mot_down = 8;
+const int photocell_input_pin = A3;
+const int mot_up_pin = 7;
+const int mot_down_pin = 8;
 
-const int power_L298N = 11;
-const int power_photocell = 13;
+const int power_L298N_pin = 11;
+const int power_photocell_pin = 13;
 
-const int topSwitchPin = 2;
-const int bottomSwitchPin = 3;
+const int top_switch_pin = 2;
+const int bottom_switch_pin = 3;
 
 void quick_wait(){
   LowPower.powerDown(SLEEP_250MS, ADC_OFF, BOD_OFF);
@@ -26,41 +26,41 @@ void deep_sleep(int nb_minutes) {
 
 int get_light_level()
 {
-  digitalWrite(power_photocell, HIGH);
+  digitalWrite(power_photocell_pin, HIGH);
 
   quick_wait();
-  int photocell_value = analogRead(photocellPin);
+  int photocell_value = analogRead(photocell_input_pin);
   
-  digitalWrite(power_photocell, LOW);
+  digitalWrite(power_photocell_pin, LOW);
 
   return photocell_value;
 }
 
 void power_L298N()
 {
-    digitalWrite(power_L298N, HIGH);
+    digitalWrite(power_L298N_pin, HIGH);
     quick_wait();
 }
 
 void stop_motor()
 {
     // Stop the motor
-    digitalWrite(mot_down, LOW);
-    digitalWrite(mot_up, LOW);
+    digitalWrite(mot_down_pin, LOW);
+    digitalWrite(mot_up_pin, LOW);
 
     // Turn off L298N
-    digitalWrite(power_L298N, LOW);
+    digitalWrite(power_L298N_pin, LOW);
 }
 
-void setup() {  
-  pinMode(mot_down, OUTPUT);
-  pinMode(mot_up, OUTPUT);
+void setup() {        
+  pinMode(mot_down_pin, OUTPUT);
+  pinMode(mot_up_pin, OUTPUT);
   
-  pinMode(power_L298N, OUTPUT);
-  pinMode(power_photocell, OUTPUT);
+  pinMode(power_L298N_pin, OUTPUT);
+  pinMode(power_photocell_pin, OUTPUT);
 
-  pinMode(topSwitchPin, INPUT_PULLUP);
-  pinMode(bottomSwitchPin, INPUT_PULLUP);
+  pinMode(top_switch_pin, INPUT_PULLUP);
+  pinMode(bottom_switch_pin, INPUT_PULLUP);
 }
 
 void loop()
@@ -68,16 +68,16 @@ void loop()
   int photocell_value = get_light_level();
   
   // If the door is not closed and the light is below the night threshold
-  if (photocell_value < night_threshold && !digitalRead(bottomSwitchPin))
+  if (photocell_value < night_threshold && !digitalRead(bottom_switch_pin))
   {
     power_L298N();
   
     // Activate the motor to close the door
-    digitalWrite(mot_down, HIGH);
-    digitalWrite(mot_up, LOW);
+    digitalWrite(mot_down_pin, HIGH);
+    digitalWrite(mot_up_pin, LOW);
     
     // Close the door until the bottom is reached
-    while (!digitalRead(bottomSwitchPin)) {}
+    while (!digitalRead(bottom_switch_pin)) {}
     
     stop_motor();
     
@@ -85,16 +85,16 @@ void loop()
     deep_sleep(7*60);
   }
   // If the door is not opened and the light is above the day threshold
-  else if (photocell_value > day_threshold && !digitalRead(topSwitchPin))
+  else if (photocell_value > day_threshold && !digitalRead(top_switch_pin))
   {
     power_L298N();
     
     // Activate the motor to open the door
-    digitalWrite(mot_down, LOW);
-    digitalWrite(mot_up, HIGH);
+    digitalWrite(mot_down_pin, LOW);
+    digitalWrite(mot_up_pin, HIGH);
     
     // Close the door until the top is reached
-    while (!digitalRead(topSwitchPin)) {}
+    while (!digitalRead(top_switch_pin)) {}
     
     stop_motor();
 

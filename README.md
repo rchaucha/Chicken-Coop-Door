@@ -7,10 +7,10 @@ Everything has been done to maximize the battery life :
 * The Arduino Pro Mini is put into deep sleep mode almost all the time
 
 Here is the daily routine (beginning with closed door):
-1. Every 10 minutes, wake up the Arduino to check if the ambiant light is above a certain threshold (`day_threshold`).
-2. Open the door and deep sleep for 7 hours.
-3. Wake up the Arduino every 10 minutes to check if the light is below another threshold (`night_threshold`).
-4. Close the door and deep sleep for 7 hours.
+1. Every 10 minutes, wake up the Arduino to check if the ambiant light is above a certain threshold (`DAY_THRESHOLD`).
+2. Open the door and deep sleep for several hours (~6-7).
+3. Wake up the Arduino every 10 minutes to check if the light is below another threshold (`NIGHT_THRESHOLD`).
+4. Close the door and deep sleep for several hours.
 5. Repeat.
 
 ## Dependency

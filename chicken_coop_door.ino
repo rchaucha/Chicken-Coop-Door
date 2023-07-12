@@ -1,7 +1,7 @@
 #include <LowPower.h>
 
-const int night_threshold = 3;
-const int day_threshold = 50;
+const int NIGHT_THRESHOLD = 3;
+const int DAY_THRESHOLD = 30;
 
 const int photocell_input_pin = A3;
 const int mot_up_pin = 7;
@@ -72,14 +72,14 @@ void activate_door(const DOOR_OPERATION op)
   switch (op)
   {
     case OPEN :
-      digitalWrite(mot_down_pin, LOW);
       digitalWrite(mot_up_pin, HIGH);
-      switch_pin = bottom_switch_pin;
+      digitalWrite(mot_down_pin, LOW);
+      switch_pin = top_switch_pin;
       break;
     case CLOSE :
-      digitalWrite(mot_down_pin, HIGH);
       digitalWrite(mot_up_pin, LOW);
-      switch_pin = top_switch_pin;
+      digitalWrite(mot_down_pin, HIGH);
+      switch_pin = bottom_switch_pin;
       break;
   }
 
@@ -112,12 +112,12 @@ void loop()
   int photocell_value = get_light_level();
 
   // If the door is not opened and the light is above the day threshold
-  if (photocell_value > day_threshold && !digitalRead(top_switch_pin))
+  if (photocell_value > DAY_THRESHOLD && !digitalRead(top_switch_pin))
   {
     activate_door(DOOR_OPERATION::OPEN);
   }
   // If the door is not closed and the light is below the night threshold
-  else if (photocell_value < night_threshold && !digitalRead(bottom_switch_pin))
+  else if (photocell_value < NIGHT_THRESHOLD && !digitalRead(bottom_switch_pin))
   {
     activate_door(DOOR_OPERATION::CLOSE);
   }
